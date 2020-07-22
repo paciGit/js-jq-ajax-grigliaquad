@@ -1,32 +1,36 @@
-/* Evento click quadrato */
-$('.quad').click(
-  function variableNum(){
+// Inserisco i quadri con un ciclo
+for (var i = 0; i < 36; i++) {
+  // Clone
+  var quad = $("#template .quad").clone();
+  $(".container").append(quad);
+}
 
-    var element = $(this);
-    var num = $('.num', this);
-    var numBoolRandom = 'https://flynn.boolean.careers/exercises/api/random/int';
+// Ad ogni click parte una richiesta Ajax
+$(".quad").one("click", function () {
+  var clicked = $(this);
+  var numBoolRandom = 'https://flynn.boolean.careers/exercises/api/random/int';
 
-    /* Richiesta Ajax */
-    $.ajax({
-      url: numBoolRandom,
-      method: 'Get',
-      success: function(data, state){
-        var numRandom = data.response;
-        console.log(numRandom);
-        // Condizione <=5 o >5
-        if (numRandom <= 5) {
-          element.css({ "background": "#FFEB3B"});
-        } else {
-          element.css({ "background": "#8bc34a"});
-        }
-        num.html(numRandom);
-      },
+  // Richiesta Ajax
+  $.ajax({
+    url : numBoolRandom,
+    method: "Get",
+    success: function (data, state) {
+      var numRandom = data.response;
+      console.log(numRandom);
 
-      error: function(richiesta, state, error){
-        num.html('ERROR! ' + error);
-      },
-    });
-
+      // Condizione <=5 o >5
+      if (numRandom <= 5) {
+        $(clicked).addClass("yellow");
+        $(clicked).text(numRandom);
+      } else if (numRandom > 5) {
+        $(clicked).addClass("green");
+        $(clicked).text(numRandom);
+      }
+    },
+    error: function (richiesta, state, error) {
+      alert("ERROR! " + error);
+    }
+  });
 });
 
 function init() {
